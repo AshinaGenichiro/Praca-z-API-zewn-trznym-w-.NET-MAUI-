@@ -1,0 +1,76 @@
+﻿
+using MauiApp12.Constants;
+using System.Diagnostics;
+using static MauiApp12.Models.CurrencyModels;
+
+namespace MauiApp12
+{
+    public partial class MainPage : ContentPage
+    {
+        private readonly CurrencyService _currencyService;
+        public MainPage()
+        {
+            InitializeComponent();
+            _currencyService = new CurrencyService();
+        }
+
+        private async void OnGetCurrencyClicked(object sender, EventArgs e)
+        {
+          
+
+            try
+            {
+
+                var codes = new List<string> { "usd", "eur", "gbp", "chf" };
+
+                var tasks = codes
+                    .Select(code => _currencyService.GetExchangeRateAsync(code))
+                    .ToList();
+
+                await Task.WhenAll(tasks);
+
+
+                NbpRateResponse usd = tasks[0].Result;
+                NbpRateResponse eur = tasks[1].Result;
+                NbpRateResponse gbp = tasks[2].Result;
+                NbpRateResponse chf = tasks[3].Result;
+
+                UpdateCurrencyLabel(LabelUSD, LabelUSDDate, usd);
+                UpdateCurrencyLabel(LabelEUR, LabelEURDate, eur);
+                UpdateCurrencyLabel(LabelGBP, LabelGBPDate, gbp);
+                UpdateCurrencyLabel(LabelCHF, LabelCHFDate, chf);
+
+                LabelCurrencyError.IsVisible = false;
+
+                Debug.WriteLine($"Waluty OK: USD={usd?.Rates?[0]?.Mid}, EUR={eur?.Rates?[0]?.Mid}");
+            }
+            catch (Exception ex)
+            {
+                ShowCurrencyError($"Błąd: {ex.Message}");
+                Debug.WriteLine($"OnGetCurrencyClicked wyjątek: {ex.Message}");
+            }
+            finally
+            {
+               
+            }
+        }
+        private void UpdateCurrencyLabel(Label valueLabel, Label dateLabel, NbpRateResponse rate)
+        {
+            if (rate?.Rates?.Count > 0)
+            {
+                valueLabel.Text = $"{rate.Rates[0].Mid:F4} PLN";
+                dateLabel.Text = rate.Rates[0].EffectiveDate;
+            }
+            else
+            {
+                valueLabel.Text = "brak danych";
+                dateLabel.Text = "—";
+            }
+        }
+        private void ShowCurrencyError(string message)
+        {
+            LabelCurrencyError.Text = message;
+            LabelCurrencyError.IsVisible = true;
+        }
+    }
+}
