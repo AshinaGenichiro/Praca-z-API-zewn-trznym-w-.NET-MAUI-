@@ -7,55 +7,86 @@
         <VerticalStackLayout
             Padding="30,0"
             Spacing="25">
-            <Label Grid.Row="0" Grid.Column="0"
-               Text="Waluta" FontAttributes="Bold"
-               FontSize="13" TextColor="Gray" />
-            <Label Grid.Row="0" Grid.Column="1"
-               Text="Kurs (PLN)" FontAttributes="Bold"
-               FontSize="13" TextColor="Gray" />
-            <Label Grid.Row="0" Grid.Column="2"
-               Text="Data" FontAttributes="Bold"
-               FontSize="13" TextColor="Gray" />
+            
+            <HorizontalStackLayout>
+                <Label 
+                   Text="Temperatura:"
+                   TextColor="Gray" FontSize="14" />
+                <Label 
+                    x:Name="LabelTemperature"
+                    Text="—"
+                    FontSize="14" FontAttributes="Bold" />
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout>
+                <Label 
+                    Text="Wiatr:"
+                    TextColor="Gray" FontSize="14" />
+                <Label 
+                    x:Name="LabelWind"
+                    Text="—"
+                    FontSize="14"
+                    FontAttributes="Bold" />
+            </HorizontalStackLayout>
+            
+            <HorizontalStackLayout>
+                <Label 
+                   Text="Czas pomiaru:"
+                   TextColor="Gray" FontSize="14" />
+                <Label x:Name="LabelWeatherTime"
+                   Text="—"
+                   FontSize="14" />
+            </HorizontalStackLayout>
 
-            <!-- USD -->
-            <Label Grid.Row="1" Grid.Column="0"
-               Text="🇺🇸 USD" FontSize="14" />
+
+
+            <HorizontalStackLayout Spacing="50">
+                
+            <Label 
+               Text=" USD" FontSize="14" />
             <Label Grid.Row="1" Grid.Column="1"
                x:Name="LabelUSD"
                Text="—" FontSize="14" FontAttributes="Bold" />
-            <Label Grid.Row="1" Grid.Column="2"
+            <Label 
                x:Name="LabelUSDDate"
                Text="—" FontSize="13" TextColor="Gray" />
+            
+            </HorizontalStackLayout>
 
-            <!-- EUR -->
+            <HorizontalStackLayout Spacing="50">
+                
             <Label 
-               Text="🇪🇺 EUR" FontSize="14" />
+               Text=" EUR" FontSize="14" />
             <Label 
                x:Name="LabelEUR"
                Text="—" FontSize="14" FontAttributes="Bold" />
             <Label Grid.Row="2" Grid.Column="2"
                x:Name="LabelEURDate"
                Text="—" FontSize="13" TextColor="Gray" />
-
-            <!-- GBP -->
-            <Label Grid.Row="3" Grid.Column="0"
-               Text="🇬🇧 GBP" FontSize="14" />
-            <Label Grid.Row="3" Grid.Column="1"
+            </HorizontalStackLayout>
+            <HorizontalStackLayout Spacing="50">
+         
+            <Label
+               Text="GBP" FontSize="14" />
+            <Label 
                x:Name="LabelGBP"
                Text="—" FontSize="14" FontAttributes="Bold" />
-            <Label Grid.Row="3" Grid.Column="2"
+            <Label 
                x:Name="LabelGBPDate"
                Text="—" FontSize="13" TextColor="Gray" />
+            </HorizontalStackLayout>
 
-            <!-- CHF -->
-            <Label Grid.Row="4" Grid.Column="0"
-               Text="🇨🇭 CHF" FontSize="14" />
-            <Label Grid.Row="4" Grid.Column="1"
+            <HorizontalStackLayout Spacing="50">
+                
+            <Label 
+               Text="CHF" FontSize="14" />
+            <Label
                x:Name="LabelCHF"
                Text="—" FontSize="14" FontAttributes="Bold" />
-            <Label Grid.Row="4" Grid.Column="2"
+            <Label 
                x:Name="LabelCHFDate"
                Text="—" FontSize="13" TextColor="Gray" />
+            </HorizontalStackLayout>          
 
             <Label x:Name="LabelCurrencyError"
        TextColor="Red"
@@ -67,13 +98,17 @@
        Text="Ostatnia aktualizacja: —"
        FontSize="12"
        TextColor="Gray" />
-
+            <Label x:Name="LabelWeatherError"
+         Text=""
+         TextColor="Red"
+         FontSize="13"
+         IsVisible="False" />
             <Button
-                x:Name="CounterBtn"
-                Text="Click me" 
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnGetCurrencyClicked"
-                HorizontalOptions="Fill" />
+                Text="Pokaż kurs walut" 
+                Clicked="OnGetCurrencyClicked" />
+            <Button
+                Text="Pokaż pogode"
+                Clicked="OnGetWeatherClicked"/>
         </VerticalStackLayout>
     </ScrollView>
 

@@ -1,5 +1,7 @@
 ﻿
 using MauiApp12.Constants;
+using MauiApp12.Models;
+using MauiApp12.Services;
 using System.Diagnostics;
 using static MauiApp12.Models.CurrencyModels;
 
@@ -7,25 +9,53 @@ namespace MauiApp12
 {
     public partial class MainPage : ContentPage
     {
+        private readonly WeatherService _weatherService;
         private readonly CurrencyService _currencyService;
         public MainPage()
         {
             InitializeComponent();
+            _weatherService = new WeatherService();
             _currencyService = new CurrencyService();
+        }
+        private async void OnGetWeatherClicked(object sender, EventArgs e)
+        {
+            try
+            {
+                
+                WeatherResponse pogoda = await _weatherService.GetWeatherAsync(52.23, 21.01);
+
+                if (pogoda?.Current != null)
+                {
+                   
+                    LabelTemperature.Text = $"{pogoda.Current.Temperature:F1} °C";
+                    LabelWind.Text = $"{pogoda.Current.WindSpeed:F1} km/h";
+                    LabelWeatherTime.Text = pogoda.Current.Time ?? "—";
+
+                    LabelWeatherError.IsVisible = false;
+
+                    Debug.WriteLine($"Pogoda OK: {pogoda.Current.Temperature}°C, {pogoda.Current.WindSpeed} km/h");
+                }
+                else
+                {
+                    ShowWeatherError("Nie udało się pobrać danych pogodowych.\nSprawdź połączenie z internetem.");
+                }
+            }
+            catch (Exception ex)
+            {
+                
+                Debug.WriteLine($"OnGetWeatherClicked wyjątek: {ex.Message}");
+            }
+           
         }
 
         private async void OnGetCurrencyClicked(object sender, EventArgs e)
         {
-          
-
             try
             {
 
                 var codes = new List<string> { "usd", "eur", "gbp", "chf" };
 
-                var tasks = codes
-                    .Select(code => _currencyService.GetExchangeRateAsync(code))
-                    .ToList();
+                var tasks = codes.Select(code => _currencyService.GetExchangeRateAsync(code)).ToList();
 
                 await Task.WhenAll(tasks);
 
@@ -71,6 +101,11 @@ namespace MauiApp12
         {
             LabelCurrencyError.Text = message;
             LabelCurrencyError.IsVisible = true;
+        }
+        private void ShowWeatherError(string message)
+        {
+            LabelWeatherError.Text = message;
+            LabelWeatherError.IsVisible = true;
         }
     }
 }
